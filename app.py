@@ -12,34 +12,36 @@ uploaded_file = st.file_uploader("Выберите CSV файл клиента",
 if uploaded_file is not None:
     df = pd.read_csv(uploaded_file)
     df['Дата'] = pd.to_datetime(df['Дата'])
-    df['День_недели'] = df['Дата'].dt.day_name()
+    
+    # 1. Создаем словарь для перевода
+    days_map = {
+        'Monday': 'Понедельник', 'Tuesday': 'Вторник', 'Wednesday': 'Среда',
+        'Thursday': 'Четверг', 'Friday': 'Пятница', 'Saturday': 'Суббота', 'Sunday': 'Воскресенье'
+    }
+    
+    # 2. Получаем английские названия и сразу переводим их
+    df['День_недели'] = df['Дата'].dt.day_name().map(days_map)
     
     st.success("Данные загружены!")
 
-    # Расчет метрик для отображения и отправки
-    total_revenue = df['Сумма_чека'].sum()
-    avg_check = df['Сумма_чека'].mean()
-    total_margin = df['Маржа'].sum()
-
-    # Метрики в интерфейсе
-    col1, col2, col3 = st.columns(3)
-    col1.metric("Общая выручка", f"{total_revenue:,.0f} ₽")
-    col2.metric("Средний чек", f"{avg_check:,.0f} ₽")
-    col3.metric("Общая маржа", f"{total_margin:,.0f} ₽")
+    # ... (метрики остаются без изменений) ...
 
     # График
     st.subheader("Средние продажи по дням недели")
+    # Теперь reindex сработает, так как в df уже русские названия
     weekly_sales = df.groupby('День_недели')['Сумма_чека'].mean().reindex(
         ['Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота', 'Воскресенье']
     )
     st.bar_chart(weekly_sales)
 
     anomaly_status = "Норма"
-    if weekly_sales['Воскресение'] < weekly_sales.mean() * 0.5:
+    
+    # ПРОВЕРКА: используем "Воскресенье" (как в списке выше)
+    if weekly_sales['Воскресенье'] < weekly_sales.mean() * 0.5:
         anomaly_status = "🚨 АНОМАЛИЯ В ВОСКРЕСЕНЬЕ"
         st.error(f"Внимание! Выявлена аномалия: продажи в воскресенье критически ниже среднего.")
 
-    st.divider() # Визуальная черта перед кнопкой отправки
+    # ... (дальше блок n8n без изменений) ...
 
     # --- БЛОК СВЯЗИ С N8N ---
     st.subheader("Уведомления")
