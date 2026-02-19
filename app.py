@@ -50,7 +50,7 @@ if uploaded_file is not None:
 
     # --- БЛОК СВЯЗИ С N8N ---
     st.subheader("Уведомления")
-    N8N_WEBHOOK_URL = "https://ksu55.app.n8n.cloud/webhook-test/8936abb5-3ffd-4ca3-86dd-cf57c1c56e4b"
+    N8N_WEBHOOK_URL = "https://ksu55.app.n8n.cloud/webhook/8936abb5-3ffd-4ca3-86dd-cf57c1c56e4b"
 
     if st.button('🚀 Отправить отчет в Telegram через n8n'):
         # Теперь переменные существуют и подставятся сюда:
