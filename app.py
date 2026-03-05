@@ -111,7 +111,7 @@ if uploaded_file is not None:
 
         # 8. Отправка в Telegram
         st.subheader("📢 Уведомления")
-        N8N_URL = "https://ksu55.app.n8n.cloud/webhook/8936abb5-3ffd-4ca3-86dd-cf57c1c56e4b"
+        N8N_URL = "https://ksautomationai.com:5678/webhook/8936abb5-3ffd-4ca3-86dd-cf57c1c56e4b"
 
         if st.button('🚀 Отправить отчет в Telegram'):
             payload = {
